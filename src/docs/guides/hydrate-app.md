@@ -44,21 +44,27 @@ export function hydrateComponents(doc) {
 ```
 
 #### hydrateDocument Options
-  - `canonicalUrl` - string
-  - `constrainTimeouts` - boolean
-  - `clientHydrateAnnotations` - boolean
-  - `cookie` - string
-  - `direction` - string
-  - `language` - string
-  - `maxHydrateCount` - number
-  - `referrer` - string
-  - `removeScripts` - boolean
-  - `removeUnusedStyles` - boolean
-  - `resourcesUrl` - string
-  - `timeout` - number
-  - `title` - string
-  - `url` - string
-  - `userAgent` - string
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `canonicalUrl` | string | Sets the `href` attribute on the `<link rel="canonical">` tag within the `<head>`. If the value is not defined it will ensure a canonical link tag is no included in the `<head>`. |
+| `constrainTimeouts` | boolean | Constrain `setTimeout()` to 1ms, but still async. Also only allows `setInterval()` to fire once, also constrained to 1ms. Defaults to `true`. |
+| `clientHydrateAnnotations` | boolean | Include the HTML comments and attributes used by the clientside JavaScript to read the structure of the HTML and rebuild each component. Defaults to `true`. |
+| `cookie` |  string | Sets `document.cookie` |
+| `direction` |  string | Sets the `dir` attribute on the top level `<html>`. |
+| `excludeCommponents` |  string[] | Component tag names listed here will not be prerendered, nor will hydrated on the clientside. Components listed here will be ignored as custom elements and treated no differently than a `<div>`. |
+| `language` |  string | Sets the `lang` attribute on the top level `<html>`. |
+| `maxHydrateCount` |  number | Maximum number of components to hydrate on one page. Defaults to `300`. |
+| `referrer` |  string |  Sets `document.referrer` |
+| `removeScripts` |  boolean | Removes every `<script>` element found in the `document`. Defaults to `false`. |
+| `removeUnusedStyles` |  boolean | Removes CSS not used by elements within the `document`. Defaults to `true`. |
+| `resourcesUrl` |  string | The url the runtime uses for the resources, such as the assets directory. |
+| `runtimeLogging` |  boolean | Prints out runtime console logs to the NodeJS process. Defaults to `false`. |
+| `staticComponents` |  string[] | Component tags listed here will only be prerendered or serverside-rendered and will not be clientside hydrated. This is useful for components that are not dynamic and do not need to be defined as a custom element within the browser. For example, a header or footer component would be a good example that may not require any clientside JavaScript. |
+| `timeout` | number |  The amount of milliseconds to wait for a page to finish rendering until a timeout error is thrown. Defaults to `15000`. |
+| `title` | string |  Sets `document.title`. |
+| `url` | string |  Sets `location.href` |
+| `userAgent` | string |  Sets `navigator.userAgent` |
 
 **renderToString**: The hydrate app also has a `renderToString` function that allows you to pass in an html string that also returns a promise of `HydrateResults`. The second parameter is a config object that can alter the output of the markup. Like `hydrateDocument`, the resulting string can be parsed from the `html` property.
 
@@ -75,11 +81,15 @@ console.log(results.html);
 
 #### renderToString Options
 
-  - `approximateLineWidth` - number
-  - `prettyHtml` - boolean
-  - `removeAttributeQuotes` - boolean
-  - `removeBooleanAttributeQuotes` - boolean
-  - `removeEmptyAttributes` - boolean
-  - `removeHtmlComments` - boolean
-  - `afterHydrate` - boolean
-  - `beforeHydrate` - boolean
+See `hydrateDocument Options` above as well.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `approximateLineWidth` | number | Sets an approximate line width the HTML should attempt to stay within. Note that this is "approximate", in that HTML may often not be able to be split at an exact line width. Additionally, new lines created is where HTML naturally already has whitespce, such as before an attribute or spaces between words. Defaults to `100`. |
+| `prettyHtml` | boolean | Format the HTML in a nicely indented format. Defaults to `false`. |
+| `removeAttributeQuotes` | boolean | Remove quotes from attribute values when possible. Defaults to `true`. |
+| `removeBooleanAttributeQuotes` | boolean | Remove the `=""` from standardized `boolean` attributes, such as `hidden` or `checked`. Defaults to `true`. |
+| `removeEmptyAttributes` | boolean | Remove these standardized attributes when their value is empty: `class`, `dir`, `id`, `lang`, and `name`, `title`. Defaults to `true`. |
+| `removeHtmlComments` | boolean | Remove HTML comments. Defaults to `true`. |
+| `afterHydrate` | `(document: any): any` `\| Promise<any>` | Runs after the `document` has been hydrated. |
+| `beforeHydrate` | `(document: any): any` `\| Promise<any>` | Runs before the `document` has been hydrated. |
